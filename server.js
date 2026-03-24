@@ -29,7 +29,7 @@ connectDB();
 
 /* MIDDLEWARE */
 app.use(cors({
-  origin: "*", // later restrict for frontend URL
+  origin: "https://hublifrnt-red.vercel.app",
   credentials: true
 }));
 
