@@ -142,7 +142,8 @@ router.post("/login", async (req, res) => {
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const emailLower = email.toLowerCase();
+    const user = await User.findOne({ email: emailLower });
 
     if (!user) {
       return res.status(400).json({
@@ -150,11 +151,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    if (!user.isVerified) {
-      return res.status(400).json({
-        message: "Please verify your email first",
-      });
-    }
 
     const match = await bcrypt.compare(password, user.password);
 
