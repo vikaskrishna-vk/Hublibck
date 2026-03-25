@@ -54,67 +54,63 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
       role,
-      otp,
-      otpExpire: Date.now() + 10 * 60 * 1000,
     });
 
     // SEND OTP EMAIL
-    await sendEmail(
-      email,
-      "OTP Verification",
-      `
-      <h2>Hello ${name}</h2>
-      <p>Your OTP for account verification is:</p>
-      <h1>${otp}</h1>
-      <p>This OTP will expire in 10 minutes.</p>
-      `
-    );
+//     await sendEmail(
+//       email,
+//       "OTP Verification",
+//       `
+//       <h2>Hello ${name}</h2>
+//       <p>Your OTP for account verification is:</p>
+//       <h1>${otp}</h1>
+//       <p>This OTP will expire in 10 minutes.</p>
+//       `
+//     );
 
-    res.json({
-      message: "OTP sent to email",
-    });
+//     res.json({
+//       message: "OTP sent to email",
+//     });
 
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 
 
 // ================= VERIFY OTP =================
-router.post("/verify-otp", async (req, res) => {
-  try {
+// router.post("/verify-otp", async (req, res) => {
+//   try {
 
-    const { email, otp } = req.body;
+//     const { email, otp } = req.body;
 
-    const user = await User.findOne({ email });
+//     const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(400).json({
-        message: "User not found",
-      });
-    }
+//     if (!user) {
+//       return res.status(400).json({
+//         message: "User not found",
+//       });
+//     }
 
-    if (user.otp !== otp || user.otpExpire < Date.now()) {
-      return res.status(400).json({
-        message: "Invalid or expired OTP",
-      });
-    }
+//     if (user.otp !== otp || user.otpExpire < Date.now()) {
+//       return res.status(400).json({
+//         message: "Invalid or expired OTP",
+//       });
+//     }
 
-    user.isVerified = true;
-    user.otp = null;
-    user.otpExpire = null;
+//     user.isVerified = true;
+//     user.otp = null;
+//     user.otpExpire = null;
 
-    await user.save();
+//     await user.save();
 
     // SEND SUCCESS EMAIL
     await sendEmail(
