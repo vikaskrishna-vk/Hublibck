@@ -20,18 +20,10 @@ const userSchema = new mongoose.Schema(
 
     isVerified: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
-    otp: {
-      type: String,
-    },
-
-    otpExpire: {
-      type: Date,
-    },
-  },
-  { timestamps: true },
+  }
 );
 
 module.exports = mongoose.model("User", userSchema);
